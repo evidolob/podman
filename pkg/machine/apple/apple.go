@@ -172,6 +172,17 @@ func StartGenericAppleVM(mc *vmconfigs.MachineConfig, cmdBinary string, bootload
 
 	vm.Devices = append(vm.Devices, defaultDevices...)
 	vm.Devices = append(vm.Devices, netDevice)
+	if mc.Resources.Serials != nil && len(mc.Resources.Serials) > 0 {
+		for _, serial := range mc.Resources.Serials {
+			wsConfig := vfConfig.VirtioSerial{
+				UsesStdio: false,
+				UsesPty:   false,
+				WebSocket: serial.WebSocket,
+			}
+			vm.Devices = append(vm.Devices, &wsConfig)
+		}
+
+	}
 
 	mounts, err := VirtIOFsToVFKitVirtIODevice(mc.Mounts)
 	if err != nil {

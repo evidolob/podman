@@ -72,12 +72,17 @@ func NewMachineConfig(opts define.InitOptions, dirs *define.MachineDirs, sshIden
 		return nil, err
 	}
 
+	serials, err := define.ParseSerials(opts.SerialDevices)
+	if err != nil {
+		return nil, err
+	}
 	// System Resources
 	mrc := ResourceConfig{
 		CPUs:     opts.CPUS,
 		DiskSize: strongunits.GiB(opts.DiskSize),
 		Memory:   strongunits.MiB(opts.Memory),
 		USBs:     usbs,
+		Serials:  serials,
 	}
 	mc.Resources = mrc
 
@@ -130,6 +135,7 @@ func (mc *MachineConfig) Write() error {
 		return err
 	}
 	logrus.Debugf("writing configuration file %q", mc.configPath.Path)
+	logrus.Debugf("Config is: %s", string(b))
 	return ioutils.AtomicWriteFile(mc.configPath.GetPath(), b, define.DefaultFilePerm)
 }
 

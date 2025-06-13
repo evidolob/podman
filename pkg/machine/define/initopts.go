@@ -45,4 +45,5 @@ type InitOptions struct {
 	ImagePuller        ImagePuller
 	CloudInit          bool
 	Capabilities       *MachineCapabilities
+	SerialDevices      []string
 }

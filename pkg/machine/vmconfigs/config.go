@@ -135,6 +135,8 @@ type ResourceConfig struct {
 	Memory strongunits.MiB
 	// Usbs
 	USBs []define.USBConfig
+	//Serial devices
+	Serials []define.SerialDevice `json:",omitempty"`
 }
 
 // SSHConfig contains remote access information for SSH
